@@ -85,6 +85,14 @@ pip install flash-attn==2.7.3 --no-build-isolation
 ```
 **Note:** if you want vLLM and transformers codes to run in the same environment, you don't need to worry about this installation error like: vllm 0.8.5+cu118 requires transformers>=4.51.1
 
+## FastAPI Service
+- Install the Python requirements and launch the wrapper with `uvicorn server:app --host 0.0.0.0 --port 8000`.
+- `GET /health` is the readiness probe, `POST /warmup` preloads the model, and `POST /idle` releases GPU memory for idle periods.
+- `POST /ocr` accepts PDFs (processed page-by-page) or images and returns DeepSeek-OCR markdown output.
+- `POST /ocr/embeddings` exposes the compact vision-token embeddings as base64-encoded NumPy arrays (shape `[tokens, hidden_dim]`) with metadata; set `include_text=true` to also stream the decoded text alongside the embeddings.
+- The server lazily loads the model and unloads it after `DEEPSEEK_OCR_IDLE_TIMEOUT` seconds (default 1800). Set `DEEPSEEK_OCR_PRELOAD=0` to skip background warm-up.
+- Tune prompts and resolution with `DEEPSEEK_OCR_PROMPT`, `DEEPSEEK_OCR_BASE_SIZE`, `DEEPSEEK_OCR_IMAGE_SIZE`, and cap large PDFs with `DEEPSEEK_OCR_MAX_PAGES`.
+
 ## vLLM-Inference
 - VLLM:
 >**Note:** change the INPUT_PATH/OUTPUT_PATH and other settings in the DeepSeek-OCR-master/DeepSeek-OCR-vllm/config.py
@@ -172,8 +180,6 @@ We also appreciate the benchmarks: [Fox](https://github.com/ucaslcl/Fox), [Omini
 ## Citation
 
 coming soon！
-
-
 
 
 

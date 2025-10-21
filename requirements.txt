@@ -4,6 +4,12 @@ PyMuPDF
 img2pdf
 einops
 easydict
-addict 
+addict
 Pillow
 numpy
+fastapi
+uvicorn[standard]
+--extra-index-url https://download.pytorch.org/whl/cu121
+torch
+torchvision
+torchaudio
